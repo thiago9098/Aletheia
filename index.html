@@ -6,11 +6,14 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Aletheia</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
+        <!-- Incluindo jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
     </head>
@@ -35,17 +38,17 @@
                 <div class="container px-5">
                     <h1 class="masthead-heading mb-0">Onde a verdade</h1>
                     <h2 class="masthead-subheading mb-0">Encontra a voz</h2>
-                    <a class="btn btn-primary btn-xl rounded-pill mt-5" onclick="verificarSessao()" onclick="openModal()">Fazer comentário</a> <!-- FAZER VERIFICAÇÃO SE O USUÁRIO JA EXISTE NO BD. SE NÃO EXISTIR ELE VAI PRA TELA DE SE CADASTRAR. SE EXISTIR ELE PODE COMENTAR-->
+                    <a class="btn btn-primary btn-xl rounded-pill mt-5" onclick="verificarSessao()">Fazer comentário</a> <!-- FAZER VERIFICAÇÃO SE O USUÁRIO JA EXISTE NO BD. SE NÃO EXISTIR ELE VAI PRA TELA DE SE CADASTRAR. SE EXISTIR ELE PODE COMENTAR-->
                 </div>
             </div>
         </header>
         
-        <section >
+        <section>
             <div class="container px-5">
                 <section style="background-color: white;">
-                    <div  class="container my-5 py-5">
-                      <div id="listaComentario" class="row d-flex justify-content-center">
-                        <div class="col-md-12 col-lg-10">
+                    <div class="container my-5 py-5">
+                      <div class="row d-flex justify-content-center">
+                        <div id="listaComentario" class="col-md-12 col-lg-10">
                                 </div>
                               </div>
                             </div>
@@ -58,9 +61,8 @@
         <!-- Footer-->
         <footer class="py-5 bg-black">
             <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; ALETHEIA 2024</p></div>
-          </footer>
-        
-          <div class="modal" id="commentModal">
+        </footer>
+        <div class="modal" id="commentModal">
           <div class="modal-content">
             <h4>Adicionar Comentário</h4>
             <div class="comment-area">
@@ -76,42 +78,6 @@
         
         <!-- SCRIPT (JS)-->
         <script>
-             function openModal() {
-              document.getElementById("commentModal").style.display = "flex";
-            }
-        
-            function closeModal() {
-              document.getElementById("commentModal").style.display = "none";
-              document.getElementById("commentTitle").value = "";
-              document.getElementById("commentText").value = "";
-            }
-
-            function addComment() {
-      const commentText = document.getElementById("commentText").value.trim();
-      const commentTitle = document.getElementById("commentTitle").value.trim();
-
-      if (commentText === ""|| commentTitle === "" ) {
-        alert("O comentário não pode estar vazio.");
-        return;
-      }
-      const commentList = document.getElementById("listaComentario");
-      const commentTemplate = `
-        <div class="card">
-          <p">Usuário Anônimo</p>
-          <h5 class="fw-bold">${commentTitle}</h5>
-          <p class="mb-0">${commentText}</p><br>
-                   <div class="d-flex align-items-center mb-3">
-            <p class="mb-0">${new Date().toLocaleDateString()}</p>
-          </div>
-        </div>
-    `;
-  
-
-      commentList.innerHTML += commentTemplate;
-
-      closeModal();
-            }
-
             function verificarSessao() {
             fetch('verificarSessao.php')
                 .then(response => response.json())
@@ -124,26 +90,75 @@
                     }
                 })}
 
-                verificarSessao2();
+                
                 function verificarSessao2() {
-            fetch('verificarSessao.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.logado) {
-                      document.getElementById("link1").style.display = "none";
-                      document.getElementById("link2").style.display = "none";
-                      document.getElementById("link3").style.display = "inline";
-                    } else {
-                      document.getElementById("link1").style.display = "inline";
-                      document.getElementById("link2").style.display = "inline";
-                      document.getElementById("link3").style.display = "none";
-                    }
-                })}
-          </script>
+                  fetch('verificarSessao.php')
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.logado) {
+                        document.getElementById("link1").style.display = "none";
+                        document.getElementById("link2").style.display = "none";
+                        document.getElementById("link3").style.display = "inline";
+                      } else {
+                        document.getElementById("link1").style.display = "inline";
+                        document.getElementById("link2").style.display = "inline";
+                        document.getElementById("link3").style.display = "none";
+                      }
+                  })
+                }
+                verificarSessao2();
 
+             function openModal() {
+              document.getElementById("commentModal").style.display = "flex";
+            } 
         
-        
+            function closeModal() {
+              document.getElementById("commentModal").style.display = "none";
+              document.getElementById("commentTitle").value = "";
+              document.getElementById("commentText").value = "";
+            }
+
+            function addComment() {
+              console.log("Iniciando envio de comentário...");  
+
+              var titulo = $('#commentTitle').val();
+              var texto = $('#commentText').val();
+              var commentData = {
+                title: "Título do comentário",
+                text: "Texto do comentário"
+              };
+
+              console.log(titulo);  
+              console.log(texto);
+              
+              if (titulo.trim() === "" || texto.trim() === "") {
+                alert("Título e comentário não podem estar vazios.");
+                return;
+              }
+
+              // Usando $.ajax para enviar os dados ao servidor
+              $.ajax({
+                url: "salvarcomentario.php",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(commentData),
+                success: function(response) {
+                  console.log("Resposta do servidor:", response);
+                    try {
+                      var jsonResponse = JSON.parse(response);  // Tente analisar como JSON
+                      console.log(jsonResponse);
+                    } catch (e) {
+                      console.error("Erro ao analisar JSON:", e);
+                    }
+                  },
+                  error: function(xhr, status, error) {
+                    console.log()
+                    console.log("Erro AJAX:", error);
+                  }
+              });
+              
+            }
+          </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> 
-        <script src="js/scripts.js"></script>
     </body>
 </html>
