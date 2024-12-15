@@ -18,9 +18,6 @@ if(isset($_POST['email']) || isset($_POST['senha'])) {
 
       $quantidade = $sql_query->num_rows;
 
-      echo "<pre>$sql_code</pre>";
-      echo $quantidade; 
-
       if($quantidade == 1) {
 
         $aluno = $sql_query->fetch_assoc();
@@ -122,7 +119,7 @@ if(isset($_POST['email']) || isset($_POST['senha'])) {
         <label for="email">Insira seu Email:</label>
         <input type="email" id="email" name="email" required>
 
-        <label for="senha">Crie uma senha:</label>
+        <label for="senha">Insira sua senha:</label>
         <input type="password" id="senha" name="senha" required><br>
 
         

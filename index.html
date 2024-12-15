@@ -6,7 +6,6 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Aletheia</title>
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
@@ -58,41 +57,21 @@
         <!-- Footer-->
         <footer class="py-5 bg-black">
             <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; ALETHEIA 2024</p></div>
-        </footer>
-        <div class="modal" id="commentModal">
-            <div class="modal-content">
-              <div class="card">
-                <div class="row">
-                  <div class="col-2">
-
-                  </div>
-                  <div class="col-10">
-                    <div class="comment-box ml-2">
-                      <h4>Adicionar comentário</h4>
-                      <div class="comment-area">
-                        <textarea id="commentTitle" class="form-control" placeholder="Título do comentário" rows="1"></textarea><br>
-                        <textarea id="commentText" class="form-control" placeholder="Faça seu comentário aqui" rows="4"></textarea>
-                      </div>
-                      <div class="comment-btns mt-2">
-                        <div class="row">
-                          <div class="col-6">
-                            <div class="pull-left">
-                              <button class="btn btn-success btn-sm" onclick="closeModal()">Cancelar</button>
-                            </div>
-                          </div>
-                          <div class="col-6">
-                            <div class="pull-right">
-                              <button onclick="addComment()" class="btn btn-success send btn-sm">Enviar <i class="fa fa-long-arrow-right ml-1"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          </footer>
+        
+          <div class="modal" id="commentModal">
+          <div class="modal-content">
+            <h4>Adicionar Comentário</h4>
+            <div class="comment-area">
+              <textarea id="commentTitle" class="form-control" placeholder="Título do comentário" rows="1"></textarea><br>
+              <textarea id="commentText" class="form-control" placeholder="Faça seu comentário aqui" rows="4"></textarea>
+            </div>
+            <div class="comment-btns">
+              <button class="btn btn-danger" onclick="closeModal()">Cancelar</button>
+              <button onclick="addComment()" class="btn btn-success">Enviar</button>
             </div>
           </div>
+        </div>
         
         <!-- SCRIPT (JS)-->
         <script>
@@ -102,13 +81,15 @@
         
             function closeModal() {
               document.getElementById("commentModal").style.display = "none";
+              document.getElementById("commentTitle").value = "";
+              document.getElementById("commentText").value = "";
             }
 
             function addComment() {
       const commentText = document.getElementById("commentText").value.trim();
       const commentTitle = document.getElementById("commentTitle").value.trim();
 
-      if (commentText === "") {
+      if (commentText === ""|| commentTitle === "" ) {
         alert("O comentário não pode estar vazio.");
         return;
       }
@@ -126,9 +107,6 @@
   
 
       commentList.innerHTML += commentTemplate;
-
-      document.getElementById("commentText").value = "";
-      document.getElementById("commentTitle").value = "";
 
       closeModal();
             }
