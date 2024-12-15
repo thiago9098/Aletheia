@@ -1,6 +1,8 @@
 # Aletheia
 
-Nosso projeto consiste na elaboração e desenvolvimento de um Sistema Web com persistência de dados e autenticação de usuários.
+Nosso projeto consiste na elaboração e desenvolvimento de um Sistema Web com persistência de dados e autenticação de usuários. A ideia do Aletheia é ser um site que, por meio da verificação do usuário, permite com que sejam publicadas reclamações acerca do Campus
+da nossa Instituição de Ensino. Portanto, se você não possuir uma conta — ou se você não estiver logado — você não poderá cadastrar suas reclamações, mas ainda poderá vê-las. O usuário admin, na teoria, é responsável pelo controle do site, portanto comentários 
+desrespeitosos serão barrados por ele por meio de uma funcionalidade que permite a exclusão dos comentários. Claro, somente disponível para o usuário admin.
 
 # Executando o Projeto
 
@@ -19,3 +21,8 @@ Após a importação do banco, você deve alterar a senha no arquivo configA.php
 <br>
 <br>
 O Sistema pode ser acessado através do seu navegador através do caminho: http://localhost/(nome_da_sua_pasta)/index.html -> caso contrário, não será possível utilizar as funções do php (essenciais para executar as funcionalidades do sistema).
+
+# Funcionalidades a serem implementadas
+- Cadastro das reclamações no banco de dados(.json) através da tela modal na tela principal;
+- Comentários do Banco de Dados visíveis na tela principal (index.html);
+- Botão de excluir comentário, visível somente para o user-admin (o botão deve aparecer conforme a comparação da session ativa [verificarSessao.php]).
