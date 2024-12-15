@@ -1,11 +1,11 @@
 <?php
 include("configA.php");
 
-if(isset($_POST['email']) || isset($_POST['senha'])){
+if(isset($_POST['email']) || isset($_POST['senha'])) {
 
     if(strlen($_POST['email']) == 0) {
       echo "Preencha seu e-mail";
-    }else if(strlen($_POST['senha']) == 0) {
+    } else if(strlen($_POST['senha']) == 0) {
       echo "Preencha sua senha";
     } else {
 
@@ -13,25 +13,30 @@ if(isset($_POST['email']) || isset($_POST['senha'])){
       $senha = $_POST['senha'];
 
 
-      $sql_code = "SELECT * FROM aluno WHERE email = '$email' AND senha = '$senha'";
+      $sql_code = "SELECT * FROM aluno WHERE email = '$email'";
       $sql_query = $mysqli->query($sql_code) or die("Falha na execução do código SQL: " . $mysqli->error);
 
       $quantidade = $sql_query->num_rows;
 
+      echo "<pre>$sql_code</pre>";
+      echo $quantidade; 
+
       if($quantidade == 1) {
 
         $aluno = $sql_query->fetch_assoc();
-
-        if(!isset($_SESSION)) {
-          session_start();
-        }
-
+        if (password_verify($senha, $aluno['senha'])) {
+          if(!isset($_SESSION)) {
+            session_start();
+          }
+      
         $_SESSION['email'] = $aluno['email'];
         $_SESSION['senha'] = $aluno['senha'];
         header("Location: index.html");
-    }
-    else{
-      echo "<script>alert('Usuário inválido');</script>";
+        } else {
+          echo "<script>alert('Senha inválida');</script>";
+        } 
+    } else {
+      echo "<script>alert('Usuário não encontrado');</script>";
     }
   }
 }
@@ -54,10 +59,13 @@ if(isset($_POST['email']) || isset($_POST['senha'])){
       height: 100vh;
     }
 
-    .aviso{
-            font-size: 12px;
-            color:gray;
-        }
+    .aviso {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+      text-align: left;
+      display: block;
+    }
 
     .container {
       background-color: #fff;
@@ -110,17 +118,19 @@ if(isset($_POST['email']) || isset($_POST['senha'])){
     <h1>Login</h1>
 
     <div class="container">
-    <form method="POST">
+    <form action="telaEntrar.php" method="POST">
         <label for="email">Insira seu Email:</label>
         <input type="email" id="email" name="email" required>
 
-        <label for="senha">Insira sua senha:</label>
+        <label for="senha">Crie uma senha:</label>
         <input type="password" id="senha" name="senha" required><br>
 
         
 
-        <button type="submit">Cadastrar</button>
+        <button type="submit">Entrar</button>
     </form>
+
+    <p class="aviso">Deseja retornar? <a href="index.html">Voltar para a tela principal</a>.</p>
 </div>
   </div>
 </body>
