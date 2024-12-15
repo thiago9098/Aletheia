@@ -22,8 +22,8 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="telaCadastro.php">Cadastrar-se</a></li>
-                        <li class="nav-item"><a class="nav-link" href="telaEntrar.php">Entrar</a></li>
+                        <li class="nav-item"><a id="links" class="nav-link" href="telaCadastro.php">Cadastrar-se</a></li>
+                        <li class="nav-item"><a id="links" class="nav-link" href="telaEntrar.php">Entrar</a></li>
                     </ul>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                 <div class="container px-5">
                     <h1 class="masthead-heading mb-0">Onde a verdade</h1>
                     <h2 class="masthead-subheading mb-0">Encontra a voz</h2>
-                    <a class="btn btn-primary btn-xl rounded-pill mt-5" onclick="openModal()">Fazer comentário</a> <!-- FAZER VERIFICAÇÃO SE O USUÁRIO JA EXISTE NO BD. SE NÃO EXISTIR ELE VAI PRA TELA DE SE CADASTRAR. SE EXISTIR ELE PODE COMENTAR-->
+                    <a class="btn btn-primary btn-xl rounded-pill mt-5" onclick="verificarSessao()" onclick="openModal()">Fazer comentário</a> <!-- FAZER VERIFICAÇÃO SE O USUÁRIO JA EXISTE NO BD. SE NÃO EXISTIR ELE VAI PRA TELA DE SE CADASTRAR. SE EXISTIR ELE PODE COMENTAR-->
                 </div>
             </div>
         </header>
@@ -110,6 +110,17 @@
 
       closeModal();
             }
+
+            function verificarSessao() {
+            fetch('verificarSessao.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.logado) {
+                        openModal();
+                    } else {
+                        alert("Você precisa entrar ou criar uma conta para comentar!");
+                    }
+                })}
           </script>
 
         
