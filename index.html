@@ -22,8 +22,9 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a id="links" class="nav-link" href="telaCadastro.php">Cadastrar-se</a></li>
-                        <li class="nav-item"><a id="links" class="nav-link" href="telaEntrar.php">Entrar</a></li>
+                        <li class="nav-item"><a id="link1" class="nav-link" href="telaCadastro.php">Cadastrar-se</a></li>
+                        <li class="nav-item"><a id="link2" class="nav-link" href="telaEntrar.php">Entrar</a></li>
+                        <li class="nav-item"><a id="link3" style="display: none;" class="nav-link" href="logout.php">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -119,6 +120,23 @@
                         openModal();
                     } else {
                         alert("Você precisa entrar ou criar uma conta para comentar!");
+                        document.getElementById("commentModal").style.display = "none";
+                    }
+                })}
+
+                verificarSessao2();
+                function verificarSessao2() {
+            fetch('verificarSessao.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.logado) {
+                      document.getElementById("link1").style.display = "none";
+                      document.getElementById("link2").style.display = "none";
+                      document.getElementById("link3").style.display = "inline";
+                    } else {
+                      document.getElementById("link1").style.display = "inline";
+                      document.getElementById("link2").style.display = "inline";
+                      document.getElementById("link3").style.display = "none";
                     }
                 })}
           </script>
