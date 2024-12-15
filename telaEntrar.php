@@ -30,6 +30,9 @@ if(isset($_POST['email']) || isset($_POST['senha'])){
         $_SESSION['senha'] = $aluno['senha'];
         header("Location: index.html");
     }
+    else{
+      echo "<script>alert('Usuário inválido');</script>";
+    }
   }
 }
 ?>
