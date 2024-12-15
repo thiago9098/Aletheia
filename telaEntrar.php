@@ -12,31 +12,47 @@ if(isset($_POST['email']) || isset($_POST['senha'])) {
       $email = $_POST['email'];
       $senha = $_POST['senha'];
 
+      // Verifica se é admin
+      $sql_admin = "SELECT * FROM admin WHERE email = '$email'";
+      $query_admin = $mysqli->query($sql_admin) or die("Falha na execução do código SQL: " . $mysqli->error);
 
-      $sql_code = "SELECT * FROM aluno WHERE email = '$email'";
-      $sql_query = $mysqli->query($sql_code) or die("Falha na execução do código SQL: " . $mysqli->error);
+      if($query_admin->num_rows == 1) {
+        // É admin, agora verificar a senha
+        $admin = $query_admin->fetch_assoc();
 
-      $quantidade = $sql_query->num_rows;
+        if (password_verify($senha, $admin['senha'])) {
+          // Inicia a sessão do admin
+          session_start();
+          $_SESSION['admin_email'] = $admin['email'];
+          header("Location: index.html"); //criar uma página com as funcionalidades do admin, ou fazer verificação na tela principal (se == admin, visualizar e ter acesso a permissão/exclusão de comentario)
+          exit;
 
-      if($quantidade == 1) {
-
-        $aluno = $sql_query->fetch_assoc();
-        if (password_verify($senha, $aluno['senha'])) {
-          if(!isset($_SESSION)) {
-            session_start();
-          }
-      
-        $_SESSION['email'] = $aluno['email'];
-        $_SESSION['senha'] = $aluno['senha'];
-        header("Location: index.html");
         } else {
-          echo "<script>alert('Senha inválida');</script>";
-        } 
-    } else {
-      echo "<script>alert('Usuário não encontrado');</script>";
+            echo "<script>alert('Senha incorreta para o admin');</script>";
+        }
+
+      } else {
+          // Verifica se é usuário comum
+          $sql_user = "SELECT * FROM aluno WHERE email = '$email'";
+          $query_user = $mysqli->query($sql_user) or die("Erro na consulta usuário: " . $mysqli->error);
+
+          if($query_user->num_rows==1) {
+
+            $aluno = $query_user->fetch_assoc();
+
+            if (password_verify($senha, $aluno['senha'])) {
+              session_start();
+              $_SESSION['email'] = $aluno['email'];
+              header("Location: index.html");
+            } else {
+              echo "<script>alert('Senha inválida');</script>";
+            } 
+        } else {
+          echo "<script>alert('Usuário não encontrado');</script>";
+        }
+      }
     }
   }
-}
 ?>
 
 <!DOCTYPE html>
@@ -119,7 +135,7 @@ if(isset($_POST['email']) || isset($_POST['senha'])) {
         <label for="email">Insira seu Email:</label>
         <input type="email" id="email" name="email" required>
 
-        <label for="senha">Insira sua senha:</label>
+        <label for="senha">Crie uma senha:</label>
         <input type="password" id="senha" name="senha" required><br>
 
         
