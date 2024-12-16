@@ -1,15 +1,26 @@
 <?php
+// Adicionando a importação das configurações antes do codigo;
+require_once("configA.php");
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $nome = $_POST["nome"];
     $email = ($_POST["email"]);
     $cpf = $_POST["cpf"];
     $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT);
-
-    require_once("configA.php");
-    $consulta = $mysqli->prepare("INSERT INTO aluno (nome, email, cpf, senha) VALUES (?, ?, ?, ?)");
-    $consulta->bind_param("ssss",$_POST['nome'], $_POST['email'], $_POST['cpf'], $senha );
-    $consulta->execute();
-    $consulta->close();
+    
+    // ERROR CORREÇÃO
+    // Adicionada verificação, caso não de erro ele redireciona para a pagina inicial;
+    try {
+      $consulta = $mysqli->prepare("INSERT INTO aluno (nome, email, cpf, senha) VALUES (?, ?, ?, ?)");
+      $consulta->bind_param("ssss",$_POST['nome'], $_POST['email'], $_POST['cpf'], $senha );
+      $consulta->execute();
+      $consulta->close();
+      header('Location: /');
+    } catch (\Throwable $th) {
+      throw $th;
+    }
 }
 ?>
 

@@ -23,8 +23,14 @@ if(isset($_POST['email']) || isset($_POST['senha'])) {
         if (password_verify($senha, $admin['senha'])) {
           // Inicia a sessão do admin
           session_start();
-          $_SESSION['admin_email'] = $admin['email'];
-          header("Location: index.html"); //criar uma página com as funcionalidades do admin, ou fazer verificação na tela principal (se == admin, visualizar e ter acesso a permissão/exclusão de comentario)
+          
+          // ERROR CORREÇÃO
+          // Na tela do / (/) ele tentava acessar a chave : 'email' dentro do objeto $_SESSION
+          // Só que estava sendo criada a chave : 'admin_email' nesta tela quando admin, 
+          // isso fazia com que gera-se um erro quando admin
+          // corrigido para : 'email'
+          $_SESSION['email'] = $admin['email'];
+          header("Location: /"); //criar uma página com as funcionalidades do admin, ou fazer verificação na tela principal (se == admin, visualizar e ter acesso a permissão/exclusão de comentario)
           exit;
 
         } else {
@@ -43,7 +49,7 @@ if(isset($_POST['email']) || isset($_POST['senha'])) {
             if (password_verify($senha, $aluno['senha'])) {
               session_start();
               $_SESSION['email'] = $aluno['email'];
-              header("Location: index.html");
+              header("Location: /");
             } else {
               echo "<script>alert('Senha inválida');</script>";
             } 
@@ -143,7 +149,7 @@ if(isset($_POST['email']) || isset($_POST['senha'])) {
         <button type="submit">Entrar</button>
     </form>
 
-    <p class="aviso">Deseja retornar? <a href="index.html">Voltar para a tela principal</a>.</p>
+    <p class="aviso">Deseja retornar? <a href="/">Voltar para a tela principal</a>.</p>
 </div>
   </div>
 </body>

@@ -1,3 +1,27 @@
+<?php
+include("configA.php");
+
+// ERROR CORREÇÃO
+// Adicionando pré carregamento para trazer a listagem dos comentarios no banco;
+session_start();
+
+// Verifica se o usuário está logado
+if (isset($_SESSION['email'])) {
+   
+  // consulta todos os comentarios da table em ordem decrescente
+  $sql = "SELECT * FROM comentario ORDER BY id DESC";
+  $query = $mysqli->query($sql) or die("Falha na execução do código SQL: " . $mysqli->error);
+
+  $comentarios = $query->fetch_all(MYSQLI_ASSOC);
+}else {
+  $comentarios = [];
+}
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -49,11 +73,34 @@
                     <div class="container my-5 py-5">
                       <div class="row d-flex justify-content-center">
                         <div id="listaComentario" class="col-md-12 col-lg-10">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          <ul>
+                            <!-- ERROR CORREÇÃO -->
+                            <!-- LISTANDO NA TELA TODOS OS COMENTARIOS -->
+                            <?php
+                              foreach ($comentarios as $key => $value) {
+                                # code...
+                                $autor = $value["aluno_email"];
+                                $texto = $value["texto"];
+                                $data = $value["data"];
+                                $titulo = $value["titulo"];
+
+                                echo "
+                                  <li>
+                                    <h4>$autor -> $titulo:</h4>
+                                    
+                                    <p>
+                                      $texto
+                                      <small>$data</small>
+                                    
+                                    </p>
+                                    </li>
+                                    ";
+                                  }
+                                  ?>
+                          </ul>
                         </div>
+                      </div>
+                    </div>
                   </section>
             </div>
         </section>
@@ -123,9 +170,11 @@
 
               var titulo = $('#commentTitle').val();
               var texto = $('#commentText').val();
+
+              //Enviando o texto e o titulo digitado pelo usuario
               var commentData = {
-                title: "Título do comentário",
-                text: "Texto do comentário"
+                title: titulo,
+                text: texto
               };
 
               console.log(titulo);  
@@ -145,8 +194,9 @@
                 success: function(response) {
                   console.log("Resposta do servidor:", response);
                     try {
-                      var jsonResponse = JSON.parse(response);  // Tente analisar como JSON
-                      console.log(jsonResponse);
+                     // Tente analisar como JSON
+                      console.log(response);
+                      if(response.status == "success"){location.reload()}
                     } catch (e) {
                       console.error("Erro ao analisar JSON:", e);
                     }
